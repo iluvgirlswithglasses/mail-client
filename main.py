@@ -17,11 +17,5 @@ import os, sys
 from client import Client
 
 if __name__ == "__main__":
-    c = Client()
-
-    c.connect('localhost', 4000)
-    print(c.recv())
-
-    c.send('EHLO [localhost]')
-    print(c.recv())
+    pass
 

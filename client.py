@@ -16,10 +16,7 @@ FYI I use Debian
 import socket
 
 class Client:
-    def __init__(self):
-        self.sock = None
-
-    def connect(self, host, port):
+    def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
 
