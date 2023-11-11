@@ -23,15 +23,14 @@ class Client:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
 
-    def is_connected(self):
-        return self.sock is not None
-
     def close(self):
-        if self.is_connected():
-            self.sock.close()
+        self.sock.close()
 
     def send(self, mssg):
-        if self.sock is None:
-            return
         self.sock.sendall(bytes(mssg + '\r\n', 'utf8'))
+
+    def recv(self):
+        data = self.sock.recv(1024)
+        code, mssg = data.decode('utf8').split(' ', 1)
+        return code, mssg.strip()
 
