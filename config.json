@@ -1,0 +1,28 @@
+{
+	"mime_version": "1.0",
+	"user_agent": "Schwimmende Mohre Mail Client",
+	"content_language": "en-US",
+	"content_type": "text/plain; charset=UTF-8; format=flowed",
+	"content_transfer_encoding": "7bit",
+
+	"refresh_interval": 10,
+	"spam_words": ["troll", "advertisement"],
+	"directories":
+	{
+		"default": "Inbox",
+		"spamdir": "Spam",
+		"address":
+		{
+			"iluv@admin": "Admin",
+			"kither@admin": "Admin"
+		},
+		"subject":
+		{
+			"important": "Important"
+		},
+		"keyword":
+		{
+			"important": "Important"
+		}
+	}
+}
