@@ -14,6 +14,7 @@ FYI I use Debian
 """
 
 from typing import Dict, List
+from datetime import datetime
 from client import Client
 
 class SmtpClient(Client):
@@ -40,7 +41,7 @@ class SmtpClient(Client):
 
         # headers
         self.putcmd('DATA')
-        self.send(f'Message-ID: {self.gen_mssg_id(strt, "")}')
+        self.send(f'Message-ID: {self.gen_mssg_id(strt)}')
         self.send(f'Date: {self.gen_cdate()}')
         self.send(f'MIME-Version: {self.__get_mime_version()}')
         self.send(f'User-Agent: {self.__get_user_agent()}')
@@ -74,13 +75,13 @@ class SmtpClient(Client):
     """
     @ generators
     """
-    def gen_mssg_id(self, strt: str, mssg: str):
-        """Give the message an ID by hashing somethings..."""
-        return 0
+    def gen_mssg_id(self, strt: str):
+        """Give the message an ID"""
+        return '{}-{}'.format(datetime.now().timestamp(), strt)
 
     def gen_cdate(self):
         """Return current date in C format"""
-        return ''
+        return datetime.now().strftime("%a %b %d %H:%M:%S %Y")
 
     """
     @ constants
@@ -91,7 +92,7 @@ class SmtpClient(Client):
         return '1.0'
 
     def __get_user_agent(self):
-        return 'Schwimmende Möhre Mail Client'
+        return 'Schwimmende Mohre Mail Client'
 
     def __get_content_language(self):
         return 'en-US'
