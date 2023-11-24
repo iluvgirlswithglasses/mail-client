@@ -1,5 +1,5 @@
 
-After [Thunder Bird](https://www.thunderbird.net) loaded a mail to `iluv@example.com` inbox, the server's log looks like this:
+After [Thunder Bird](https://www.thunderbird.net) loaded a mail to `iluv@example.com`'s inbox, the server's log looks like this:
 
 ```
 [19:05:15.029] [worker-1] [INFO ] r.e.t.POP3Handler:59 - Client connected: /127.0.0.1:37476
@@ -56,5 +56,41 @@ Another sample paragraph
 [19:05:17.413] [worker-1] [INFO ] r.e.t.POP3Handler:76 - Client disconnected: /127.0.0.1:37476
 ```
 
-Your goal is to replicate what [Thunder Bird](https://www.thunderbird.net) did there.
+Look carefully at those five commands [Thunder Bird](https://www.thunderbird.net) sent:
+
+- `UIDL`
+- `DELE 1`
+- `DELE 2`
+- `DELE 3`
+- `RETR 4`
+
+With the first command, [Thunder Bird](https://www.thunderbird.net) asks the server to list all the mails which `iluv@example.com` has in their inbox.
+
+With 3 `DELE` commands, the server is asked to delete those 3 mails:
+
+- `1 20231115132058121.msg`
+- `2 20231115140959481.msg`
+- `3 20231124190243550.msg`
+
+Finally, the `RETR` command is to load the fourth indexed mail. In response, the mail server replied with this:
+
+```
+Message-ID: 1700827501.283877-iluv@here
+Date: Fri Nov 24 19:05:01 2023
+MIME-Version: 1.0
+User-Agent: Schwimmende Mohre Mail Client
+Content-Language: en-US
+To: mika@example.com
+Cc: iluv@example.com
+From: iluv@here
+Subject: Sample Subject
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Another sample paragraph
+
+.
+```
+
+Your job is to replicate exactly what [Thunder Bird](https://www.thunderbird.net) did there.
 
