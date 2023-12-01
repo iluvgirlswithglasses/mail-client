@@ -23,10 +23,11 @@ def main():
         'Cc': ['iluv@example.com'],
         'Bcc': ['tmp@here.com', 'there@there.com']
     }
-    mssg = ['', 'Sample paragraph', '', '.']
+    mssg = ['', 'This mail has four attachments']
+    attc = ['config.json', 'LICENSE', 'README.md', '.gitignore']
 
     c = SmtpClient('localhost', 4000)
-    c.send_mail('iluv@here', rcpt, 'Sample Subject', mssg, [])
+    c.send_mail('iluv@admin', rcpt, 'Four attachments mail', mssg, attc)
 
 
 if __name__ == "__main__":

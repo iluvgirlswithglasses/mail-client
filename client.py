@@ -23,8 +23,10 @@ class Client:
     def close(self):
         self.sock.close()
 
-    def send(self, mssg):
+    def send(self, mssg, flsh=False):
         self.sock.sendall(bytes(mssg + '\r\n', 'utf8'))
+        if flsh:
+            self.sock.recv(1024)
 
     def recv(self):
         data = self.sock.recv(1024)
