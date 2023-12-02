@@ -63,7 +63,6 @@ class SmtpClient(Client):
 
         # subject/content declarations
         self.send(f'Subject: {subj}')
-        self.send(f'Content-Type: {cnfg["content_type"]}')
         self.send(f'Content-Transfer-Encoding: {cnfg["content_transfer_encoding"]}')
 
         # contents

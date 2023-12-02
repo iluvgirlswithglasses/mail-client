@@ -16,9 +16,10 @@ FYI I use Debian
 import socket
 
 class Client:
-    def __init__(self, host, port, verbose=False):
+    def __init__(self, host, port, bfsz=2**20, verbose=False):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
+        self.bfsz = bfsz
         if verbose:
             print(self.recv())
         else:
@@ -30,10 +31,10 @@ class Client:
     def send(self, mssg, flsh=False):
         self.sock.sendall(bytes(mssg + '\r\n', 'utf8'))
         if flsh:
-            self.sock.recv(1024)
+            self.sock.recv(self.bfsz)
 
     def recv(self):
-        data = self.sock.recv(1024)
+        data = self.sock.recv(self.bfsz)
         mssg = data.decode('utf8')
         return mssg
 
