@@ -16,9 +16,13 @@ FYI I use Debian
 import socket
 
 class Client:
-    def __init__(self, host, port):
+    def __init__(self, host, port, verbose=False):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
+        if verbose:
+            print(self.recv())
+        else:
+            self.recv()
 
     def close(self):
         self.sock.close()
@@ -30,6 +34,6 @@ class Client:
 
     def recv(self):
         data = self.sock.recv(1024)
-        code, mssg = data.decode('utf8').split(' ', 1)
-        return code, mssg.strip()
+        mssg = data.decode('utf8')
+        return mssg
 
