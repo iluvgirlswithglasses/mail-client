@@ -9,24 +9,5 @@
 	"server_smtp_port": 4000,
 	"server_pop3_port": 4001,
 
-	"refresh_interval": 10,
-	"spam_words": ["troll", "advertisement"],
-	"directories":
-	{
-		"default": "Inbox",
-		"spamdir": "Spam",
-		"address":
-		{
-			"iluv@admin": "Admin",
-			"kither@admin": "Admin"
-		},
-		"subject":
-		{
-			"important": "Important"
-		},
-		"keyword":
-		{
-			"important": "Important"
-		}
-	}
+	"refresh_interval": 10
 }
