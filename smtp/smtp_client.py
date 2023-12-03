@@ -45,14 +45,14 @@ class SmtpClient(Client):
         # headers
         cnfg = Config.load()
         self.send('DATA', flsh=True)
+
+        boundary = f'------------{int(datetime.timestamp(datetime.now()))}'
+        self.send(f'Content-Type: multipart/mixed; boundary="{boundary}"')
         self.send(f'Message-ID: {self.gen_mssg_id(strt)}')
         self.send(f'Date: {self.gen_cdate()}')
         self.send(f'MIME-Version: {cnfg["mime_version"]}')
         self.send(f'User-Agent: {cnfg["user_agent"]}')
         self.send(f'Content-Language: {cnfg["content_language"]}')
-
-        boundary = f'------------{int(datetime.timestamp(datetime.now()))}'
-        self.send(f'Content-Type: multipart/mixed; boundary="{boundary}"')
 
         # to/cc/bcc/from
         for mode, recipients in dest.items():
@@ -63,11 +63,17 @@ class SmtpClient(Client):
 
         # subject/content declarations
         self.send(f'Subject: {subj}')
-        self.send(f'Content-Transfer-Encoding: {cnfg["content_transfer_encoding"]}')
+        self.send('')
+        self.send(f'This is a multi-part message in MIME format.')
 
-        # contents
+        # text content
+        self.send(f'--{boundary}')
+        self.send(f'Content-Type: {cnfg["content_type"]}')
+        self.send(f'Content-Transfer-Encoding: {cnfg["content_transfer_encoding"]}')
         for line in mssg:
             self.send(line)
+
+        # attachments
         for item in attc:
             self.send_attachment(boundary, item)
 
