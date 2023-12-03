@@ -2,7 +2,7 @@
 """
 author:     iluvgirlswithglasses
 github:     https://github.com/iluvgirlswithglasses
-created:    Sat Nov 11 15:23:27 2023
+created:    Sun Dec  3 11:07:05 2023
 tab-width:  4 spaces
 
  /\_/\
@@ -13,8 +13,9 @@ I firmly believe in the supremacy of the Euphonium
 FYI I use Debian
 """
 
-from app.greeter import CGreeter
+from app.printer import Printer
 
-if __name__ == "__main__":
-    CGreeter()
+class CInbox(Printer):
+    def __init__(self, user):
+        super().__init__()
 
