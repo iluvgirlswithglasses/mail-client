@@ -17,6 +17,8 @@ import os, time, threading
 from config import Config
 from filemanager import FileManager
 from app.printer import Printer
+from app.mail_viewer import MailViewer
+from pop3.pop3_client import Pop3Client
 
 class CInbox(Printer):
     def __init__(self, user):
@@ -25,6 +27,7 @@ class CInbox(Printer):
         self.allow_upd = False  # allow self.drawing_thread() to works
         self.upd_itval = Config.load()['refresh_interval']
         FileManager.initdir(user)
+        self.download_mails()
         self.iterate()
 
     def iterate(self):
@@ -33,6 +36,11 @@ class CInbox(Printer):
             return
         self.viewdir(choice)
         self.iterate()
+
+    def download_mails(self):
+        conf = Config.load()
+        c = Pop3Client(conf['server_host'], conf['server_pop3_port'])
+        c.inbox(self.user, '')
 
     """
     @ comms
@@ -66,6 +74,27 @@ class CInbox(Printer):
         self.syslog("\n\n\nAll mail in this directory:")
         choice = int(input())
         self.allow_upd = False  # stop updating the mail list
+        self.viewmail(targ, choice)
+
+    def viewmail(self, targ: str, indx: int):
+        self.scrclr()
+        if indx == 0:
+            return
+
+        # read mssg
+        mailname = os.listdir(targ)[indx - 1]
+        mssg = ""
+        with open(os.path.join(targ, mailname), 'r') as f:
+            mssg = f.read()
+
+        # show mssg
+        viewer = MailViewer()
+        viewer.view_mail(mssg)
+
+        # wait for exit
+        self.skipln()
+        self.askinp("Press <Return> to continue: ")
+        input()
 
     """
     @ utils
@@ -95,7 +124,7 @@ class CInbox(Printer):
     def draw(self, ls):
         CInbox.move_cursor(14, 1)   # mail list position
         for i, f in enumerate(ls):
-            print(f'    {i}\t{f}')
+            print(f'    {i + 1}\t{f}')
         CInbox.move_cursor(10, 13)  # input prompt position
         print('', end='\r\n--> ')
 

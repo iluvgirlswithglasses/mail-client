@@ -14,6 +14,8 @@ FYI I use Debian
 """
 
 from client import Client
+from filemanager import FileManager
+from pop3.classifier import Classifier
 
 class Pop3Client(Client):
 
@@ -31,8 +33,15 @@ class Pop3Client(Client):
         self.send('UIDL', flsh=True)
         for i in mlst:
             index, id = i.split()
-            # TODO: Handle email downloading here
             self.send(f'RETR {index}')
+            mssg = self.recv()
+            cate = Classifier.classify_email(mssg)
+            self.write_down(mssg, f'{FileManager.get_user_dir(user)}/{cate}/{id}.msg')
 
         self.send('QUIT')
+
+    def write_down(self, mssg: str, path: str):
+        f = open(path, "w")
+        f.write(mssg)
+        f.close()
 
