@@ -63,6 +63,7 @@ class CInbox(Printer):
 
         self.syslog("Type in the index of the mail you want to read")
         self.askinp("Your choice: ")
+        self.syslog("\n\n\nAll mail in this directory:")
         choice = int(input())
         self.allow_upd = False  # stop updating the mail list
 
@@ -92,5 +93,13 @@ class CInbox(Printer):
             time.sleep(self.upd_itval)
 
     def draw(self, ls):
-        print(ls)
+        CInbox.move_cursor(14, 1)   # mail list position
+        for i, f in enumerate(ls):
+            print(f'    {i}\t{f}')
+        CInbox.move_cursor(10, 13)  # input prompt position
+        print('', end='\r\n--> ')
+
+    @staticmethod
+    def move_cursor(y, x):
+        print("\033[%d;%dH" % (y, x), end="")
 
