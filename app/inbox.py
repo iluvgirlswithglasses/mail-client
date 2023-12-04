@@ -15,6 +15,7 @@ FYI I use Debian
 
 import os, time, threading
 from config import Config
+from filemanager import FileManager
 from app.printer import Printer
 
 class CInbox(Printer):
@@ -23,7 +24,7 @@ class CInbox(Printer):
         self.user = user
         self.allow_upd = False  # allow self.drawing_thread() to works
         self.upd_itval = Config.load()['refresh_interval']
-        self.initdir()
+        FileManager.initdir(user)
         self.iterate()
 
     def iterate(self):
@@ -37,7 +38,7 @@ class CInbox(Printer):
     @ comms
     """
     def askdir(self):
-        userdir = f'saved_mail/{self.user}'
+        userdir = FileManager.get_user_dir(self.user)
         ls = [os.path.join(userdir, x) for x in os.listdir(userdir)]
 
         self.greet()
@@ -77,13 +78,6 @@ class CInbox(Printer):
         self.skipln()
         self.gdelog(self.sepbar)
         self.skipln()
-
-    def initdir(self):
-        ls = ['Inbox', 'Important', 'Project', 'Work', 'Spam']
-        for i in ls:
-            targ = f'saved_mail/{self.user}/{i}'
-            if not os.path.exists(targ):
-                os.makedirs(targ)
 
     """
     @ threading

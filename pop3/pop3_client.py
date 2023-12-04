@@ -25,14 +25,14 @@ class Pop3Client(Client):
 
         # get list of messages
         self.send('LIST')
-        mlst = self.recv()
-        mcnt = int(mlst.split()[1])
+        mlst = self.recv().split('\r\n')[1:-2]  # cut of the first & last item
 
         # get mails
         self.send('UIDL', flsh=True)
-        for i in range(mcnt):
-            self.send(f'RETR {i+1}')
-            print(self.recv())
+        for i in mlst:
+            index, id = i.split()
+            # TODO: Handle email downloading here
+            self.send(f'RETR {index}')
 
         self.send('QUIT')
 
