@@ -16,6 +16,7 @@ FYI I use Debian
 import os, time, threading
 from config import Config
 from filemanager import FileManager
+from app.history import History
 from app.printer import Printer
 from app.mail_viewer import MailViewer
 from pop3.pop3_client import Pop3Client
@@ -26,6 +27,8 @@ class CInbox(Printer):
         self.user = user
         self.allow_upd = False  # allow self.drawing_thread() to works
         self.upd_itval = Config.load()['refresh_interval']
+        self.history = History.load()
+
         FileManager.initdir(user)
         self.download_mails()
         self.iterate()
@@ -81,10 +84,17 @@ class CInbox(Printer):
         if indx == 0:
             return
 
-        # read mssg
+        # find mssg
         mailname = os.listdir(targ)[indx - 1]
+        mailpath = os.path.join(targ, mailname)
+
+        # upd history
+        History.write(mailpath)
+        self.history.append(mailpath)
+
+        # read mssg
         mssg = ""
-        with open(os.path.join(targ, mailname), 'r') as f:
+        with open(mailpath, 'r') as f:
             mssg = f.read()
 
         # show mssg
@@ -116,15 +126,19 @@ class CInbox(Printer):
         while True:
             ls = os.listdir(targ)
             if self.allow_upd:
-                self.draw(ls)
+                self.draw(targ, ls)
             else:
                 return
             time.sleep(self.upd_itval)
 
-    def draw(self, ls):
+    def draw(self, targ, ls):
         CInbox.move_cursor(14, 1)   # mail list position
         for i, f in enumerate(ls):
-            print(f'    {i + 1}\t{f}')
+            print(f'    {i + 1}\t"{f}"', end=' ')
+            if os.path.join(targ, f) in self.history:
+                print()
+            else:
+                self.gdelog('[NEW]')
         CInbox.move_cursor(10, 13)  # input prompt position
         print('', end='\r\n--> ')
 
