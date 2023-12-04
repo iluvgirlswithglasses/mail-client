@@ -13,6 +13,14 @@ class Separator:
             return None
 
     @staticmethod
+    def get_subject(mssg):
+        l = mssg.find('Subject: ') + len('Subject: ')
+        r = mssg.find('\n', l)
+        if l != -1 and r != -1:
+            return mssg[l:r].strip()
+        return ""
+
+    @staticmethod
     def separate_attachment(data):
         attachments = []
         # Use regular expressions to extract filename and base64 content for each attachment

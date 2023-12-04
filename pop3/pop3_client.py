@@ -16,6 +16,7 @@ FYI I use Debian
 from client import Client
 from filemanager import FileManager
 from pop3.classifier import Classifier
+from pop3.separator import Separator
 
 class Pop3Client(Client):
 
@@ -36,7 +37,8 @@ class Pop3Client(Client):
             self.send(f'RETR {index}')
             mssg = self.recv()
             cate = Classifier.classify_email(mssg)
-            self.write_down(mssg, f'{FileManager.get_user_dir(user)}/{cate}/{id}.msg')
+            name = f'{Separator.get_subject(mssg)} ({id}).msg'
+            self.write_down(mssg, f'{FileManager.get_user_dir(user)}/{cate}/{name}')
 
         self.send('QUIT')
 

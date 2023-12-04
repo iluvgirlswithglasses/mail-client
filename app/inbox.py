@@ -69,7 +69,7 @@ class CInbox(Printer):
         t = threading.Thread(target=self.drawing_thread, args=(targ, ))
         t.start()
 
-        self.syslog("Type in the index of the mail you want to read")
+        self.syslog("Type in the index of the mail you want to read (or '0' to cancel)")
         self.askinp("Your choice: ")
         self.syslog("\n\n\nAll mail in this directory:")
         choice = int(input())
