@@ -69,7 +69,8 @@ class CInbox(Printer):
         self.greet()
 
         self.allow_upd = True
-        t = threading.Thread(target=self.drawing_thread, args=(targ, ))
+        self.looking_dir = targ
+        t = threading.Thread(target=self.drawing_thread)
         t.start()
 
         self.syslog("Type in the index of the mail you want to read (or '0' to cancel)")
@@ -122,20 +123,20 @@ class CInbox(Printer):
     """
     @ threading
     """
-    def drawing_thread(self, targ: str):
+    def drawing_thread(self):
         while True:
-            ls = os.listdir(targ)
             if self.allow_upd:
-                self.draw(targ, ls)
+                self.draw()
             else:
                 return
             time.sleep(self.upd_itval)
 
-    def draw(self, targ, ls):
+    def draw(self):
+        ls = os.listdir(self.looking_dir)
         CInbox.move_cursor(14, 1)   # mail list position
         for i, f in enumerate(ls):
             print(f'    {i + 1}\t"{f}"', end=' ')
-            if os.path.join(targ, f) in self.history:
+            if os.path.join(self.looking_dir, f) in self.history:
                 print()
             else:
                 self.gdelog('[NEW]')
