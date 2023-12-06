@@ -9,5 +9,26 @@
 	"server_smtp_port": 4000,
 	"server_pop3_port": 4001,
 
-	"refresh_interval": 10
+	"refresh_interval": 10,
+	"keywords": {
+		"important": [
+			"urgent", "asap", "important", "action required", "critical",
+			"priority", "attention", "dealine", "approval required", "emergency",
+			"important information", "right now"
+		],
+		"spam": [
+			"virus", "hack", "crack", "security alert", "suspicious activity",
+			"unauthorized access", "account compromise", "fraud warning", "phishing attempt",
+			"please confirm your identity", "click here to reset your password", "verify your account",
+			"unusual login activity", "your account will be suspended", "bank account verification",
+			"important security upadate", "win a prize", "win a lottery"
+		],
+		"work": [
+			"meeting", "report", "project update", "task", "collaboration", "discussion", "schedule",
+			"feedback", "assignment"
+		],
+		"project": [
+			"iluv@admin"
+		]
+	}
 }
