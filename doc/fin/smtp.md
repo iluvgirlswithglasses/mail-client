@@ -1,7 +1,7 @@
 
 # SMTP
 
-Sending mails — either in TO, CC, or BCC method — all work under a simple protocol called SMTP. This section explains how SMTP was implemented in this project.
+Sending emails — either in TO, CC, or BCC — all operates under a simple protocol called SMTP. This section explains how SMTP was implemented in this project.
 
 ## Observation
 
@@ -36,7 +36,7 @@ Using Thunderbird to send a decoy mail to the mail server, we obtained this log:
 [09:14:47.423] [worker-0] [DEBUG] r.e.t.SMTPHandler:186 - >>: 250 371 bytes accepted
 ```
 
-By looking at the log, we knew exactly what the mail client must do so as to send a mail like Thunderbird:
+By analyzing the log, we knew precisely the specific steps a mail client must take to send an email in a manner similar to Thunderbird:
 
 ```py
 [09:14:47.368] [worker-0] [DEBUG] r.e.t.SMTPHandler:120 - <<: EHLO [127.0.0.1]
@@ -70,11 +70,11 @@ That log is precisely, line-to-line, what our SMTP module does. When you envoke 
 4. `DATA`: Indicates that the mail's content begins at the next line
 5. Writes every line of the mail's content
 
-There is one notice, though, that the mail content is more than just words being sent. Sometimes, you send files; And sometimes, you send your mail to different people in different manners. The next part of this section explains how our SMTP module handles these demands.
+There is one notice, though, that the mail is more than just words being sent. Sometimes, you send files; And sometimes, you send your mail to different people in different manners. The next part of this section explains how our SMTP module handles these demands.
 
 ## Multipart/Mixed Message
 
-To support attachment sendings, the message is divided into parts, and parts are separated from each other by a designated boundary. A multipart message should look like this format:
+To support attachments sending, the message is segmented into parts, each separated by a designated boundary. A multipart message should adhere to this format:
 
 ```py
 Content-Type: multipart/mixed; boundary="------------???????"
@@ -97,7 +97,7 @@ Content-Transfer-Encoding: base64
 --------------???????--
 ```
 
-The `<<<headers>>>` section does not only tell what time was the mail sent, or what user agent was used by the sender; It also tells who are to receive the mail, and in what way, be it TO, CC, or BCC. For example, our SMTP module composed this mail to the mail server:
+The `<<<headers>>>` section serves not only to indicate the timestamp and language of the email; but also specifies the recipients and their respective roles—be it TO, CC, or BCC. For instance, our SMTP module composed this mail to the mail server:
 
 ```py
 Content-Type: multipart/mixed; boundary="------------1701588462"
@@ -139,11 +139,11 @@ LiBGdWNrIGl0LgoK
 --------------1701588462--
 ```
 
-Then, using Thunderbird to receive the mail from the server, three people (iluv@example.com, here@there.com, hidden@bcc.com) got this mail:
+Then, using Thunderbird to receive the mail from the server, three people — iluv@example.com, here@there.com, hidden@bcc.com — got this mail:
 
 ![Thunderbird](thunderbird.png)
 
-This example illustrates the capability of our SMTP module to send a mail in both TO, CC, and BCC method. Regarding the BCC method, it is observable that while all three people received the mail, 'hidden@bcc.com' does not present in the recipient list. This is because 'iluv@admin.com' sent this mail to `hidden@bcc.com` via BCC.
+This example demonstrates our SMTP module's ability to send emails using the TO, CC, and BCC methods. Regarding the BCC method, it is observable that although all recipients received the mail, 'hidden@bcc.com' is invisible to other receivers. This is because 'iluv@admin.com' sent this mail to 'hidden@bcc.com' via BCC.
 
 Additionally, the example shows that our mail client is capable of sending attachments too.
 
