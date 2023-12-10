@@ -9,7 +9,7 @@ This is a console application. And if the application needs to update the inbox 
 
 ## Threading Manager
 
-A thread is spawned to automatically download new mails from the mail server. After each download, it utilizes the Console Manipulator to render the mails onto the screen.
+This module spawns a thread that automatically downloads new mails from the mail server. After each download, it utilizes the Console Manipulator to render the new inbox.
 
 ## Note
 
